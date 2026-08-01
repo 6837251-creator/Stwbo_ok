@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตลาดหนังสือมือสอง 🌈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF8F0;
+  --pink:#FFD1E8;
+  --pink-deep:#FF9FD1;
+  --mint:#C6F5DE;
+  --mint-deep:#77DDB0;
+  --sky:#C7E9FB;
+  --sky-deep:#7FCBEE;
+  --lemon:#FFF2A8;
+  --lemon-deep:#FFD966;
+  --lavender:#E3D7FF;
+  --lavender-deep:#BBA3F7;
+  --ink:#453455;
+  --white:#FFFFFF;
+  --shadow-ink: rgba(69,52,85,0.9);
+  --radius-lg:26px;
+  --radius-md:18px;
+  --border-w:3px;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Mali','Comic Sans MS',cursive,sans-serif;
+  position:relative;
+  overflow-x:hidden;
+  padding-bottom:60px;
+}
+
+/* ---------- Decorative blobs ---------- */
+.blob{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(0px);
+  opacity:0.55;
+  z-index:0;
+  pointer-events:none;
+}
+.blob-1{
+  width:260px; height:260px;
+  background:var(--lemon);
+  top:-80px; left:-80px;
+}
+.blob-2{
+  width:220px; height:220px;
+  background:var(--sky);
+  top:120px; right:-100px;
+}
+.blob-3{
+  width:200px; height:200px;
+  background:var(--pink);
+  bottom:0; left:40%;
+}
+
+/* ---------- Hero ---------- */
+header.hero{
+  position:relative;
+  z-index:1;
+  padding:44px 20px 34px;
+  display:flex;
+  justify-content:center;
+}
+.speech-bubble{
+  position:relative;
+  background:var(--white);
+  border:var(--border-w) solid var(--ink);
+  border-radius:32px;
+  padding:28px 30px 30px;
+  max-width:560px;
+  text-align:center;
+  box-shadow:8px 8px 0 var(--shadow-ink);
+}
+.speech-bubble::after{
+  content:"";
+  position:absolute;
+  bottom:-26px;
+  left:60px;
+  width:0; height:0;
+  border-left:16px solid transparent;
+  border-right:16px solid transparent;
+  border-top:26px solid var(--ink);
+}
+.speech-bubble::before{
+  content:"";
+  position:absolute;
+  bottom:-19px;
+  left:64px;
+  width:0; height:0;
+  border-left:12px solid transparent;
+  border-right:12px solid transparent;
+  border-top:20px solid var(--white);
+  z-index:1;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  font-weight:700;
+  color:var(--ink);
+  background:var(--lemon);
+  border:2px solid var(--ink);
+  padding:5px 14px;
+  border-radius:999px;
+}
+.title{
+  font-size:clamp(26px,5vw,40px);
+  font-weight:800;
+  margin:16px 0 10px;
+  line-height:1.25;
+  color:var(--ink);
+}
+.hl{
+  position:relative;
+  display:inline-block;
+  color:var(--ink);
+}
+.hl::before{
+  content:"";
+  position:absolute;
+  left:-6px; right:-8px; bottom:0; top:38%;
+  background:var(--pink-deep);
+  z-index:-1;
+  border-radius:6px 12px 8px 14px / 10px 6px 12px 8px;
+  transform:rotate(-1.5deg);
+}
+.subtitle{
+  font-size:15px;
+  color:#6B5B7B;
+  max-width:440px;
+  margin:0 auto;
+  line-height:1.7;
+}
+
+/* ---------- Main / tabs ---------- */
+main{
+  position:relative;
+  z-index:1;
+  max-width:1040px;
+  margin:0 auto;
+  padding:6px 18px 0;
+}
+.tabs{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:28px;
+  flex-wrap:wrap;
+}
+.tab-btn{
+  font-family:inherit;
+  font-size:15px;
+  font-weight:700;
+  padding:11px 22px;
+  border-radius:999px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--white);
+  color:var(--ink);
+  cursor:pointer;
+  box-shadow:4px 4px 0 var(--shadow-ink);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.tab-btn:hover{ transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--shadow-ink); }
+.tab-btn:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--shadow-ink); }
+.tab-btn.active{
+  background:var(--mint-deep);
+}
+
+section.panel{ display:none; animation:fade .25s ease; }
+section.panel.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+.sticker-card{
+  background:var(--white);
+  border:var(--border-w) solid var(--ink);
+  border-radius:var(--radius-lg);
+  box-shadow:6px 6px 0 var(--shadow-ink);
+}
+
+/* ---------- Sell form ---------- */
+#sellForm{
+  padding:28px 26px 30px;
+  max-width:640px;
+  margin:0 auto 44px;
+}
+.form-title{
+  font-size:22px;
+  font-weight:800;
+  margin:0 0 6px;
+}
+.form-note{
+  font-size:13.5px;
+  color:#6B5B7B;
+  background:var(--lemon);
+  border:2px dashed var(--lemon-deep);
+  border-radius:14px;
+  padding:10px 14px;
+  margin:0 0 20px;
+  line-height:1.6;
+}
+.field{ margin-bottom:18px; }
+.field label{
+  display:block;
+  font-size:14.5px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.req{ color:#FF6B8B; }
+.field input[type=text],
+.field input[type=number],
+.field select{
+  width:100%;
+  font-family:inherit;
+  font-size:15px;
+  padding:11px 14px;
+  border-radius:14px;
+  border:2.5px solid var(--ink);
+  background:#FFFDF9;
+  color:var(--ink);
+  outline:none;
+}
+.field input:focus, .field select:focus{
+  background:var(--white);
+  box-shadow:3px 3px 0 var(--lavender-deep);
+}
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:520px){ .row2{ grid-template-columns:1fr; } }
+
+.cat-picker{ display:flex; flex-wrap:wrap; gap:9px; }
+.cat-chip{
+  border:2.5px solid var(--ink);
+  background:var(--white);
+  color:var(--ink);
+  font-size:14px;
+  font-weight:700;
+  padding:8px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  user-select:none;
+  box-shadow:3px 3px 0 var(--shadow-ink);
+  transition:transform .1s;
+}
+.cat-chip:hover{ transform:translate(-1px,-1px); }
+.cat-chip.selected{
+  background:var(--sky-deep);
+}
+
+.upload-box{
+  border:3px dashed var(--ink);
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  background:#FFFDF9;
+}
+.upload-box:hover{ background:var(--lavender); }
+.upload-box input{ display:none; }
+.upload-hint{ font-size:13px; color:#8A7B99; margin-top:4px; }
+#previewWrap{ margin-top:12px; display:none; justify-content:center; }
+#previewImg{
+  max-height:170px;
+  border-radius:14px;
+  border:3px solid var(--ink);
+}
+
+.submit-btn{
+  width:100%;
+  margin-top:8px;
+  background:var(--lemon-deep);
+  border:var(--border-w) solid var(--ink);
+  color:var(--ink);
+  font-family:inherit;
+  font-weight:800;
+  font-size:16.5px;
+  padding:14px;
+  border-radius:16px;
+  cursor:pointer;
+  box-shadow:5px 5px 0 var(--shadow-ink);
+  transition:transform .1s, box-shadow .1s;
+}
+.submit-btn:hover{ transform:translate(-1px,-1px); box-shadow:6px 6px 0 var(--shadow-ink); }
+.submit-btn:active{ transform:translate(3px,3px); box-shadow:1px 1px 0 var(--shadow-ink); }
+.submit-btn:disabled{ opacity:0.55; cursor:not-allowed; transform:none; box-shadow:5px 5px 0 var(--shadow-ink); }
+
+.status-msg{
+  font-size:14px;
+  margin-top:12px;
+  text-align:center;
+  min-height:20px;
+  font-weight:700;
+}
+.status-msg.ok{ color:#2E9E6D; }
+.status-msg.err{ color:#E4586F; }
+
+/* ---------- Browse ---------- */
+.filter-row{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-bottom:26px;
+  justify-content:center;
+}
+.filter-chip{
+  border:2.5px solid var(--ink);
+  background:var(--white);
+  color:var(--ink);
+  font-size:14px;
+  font-weight:700;
+  padding:8px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow:3px 3px 0 var(--shadow-ink);
+}
+.filter-chip.active{
+  background:var(--pink-deep);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
+  gap:22px;
+  margin-bottom:44px;
+}
+.book-card{
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transform:rotate(0deg);
+  transition:transform .15s ease;
+}
+.book-card:nth-child(3n+1){ transform:rotate(-1deg); }
+.book-card:nth-child(3n+2){ transform:rotate(0.8deg); }
+.book-card:nth-child(3n){ transform:rotate(-0.5deg); }
+.book-card:hover{ transform:rotate(0deg) translateY(-3px); }
+
+.book-img{
+  width:100%;
+  height:170px;
+  object-fit:cover;
+  background:var(--lavender);
+  display:block;
+  border-bottom:var(--border-w) solid var(--ink);
+}
+.book-img.placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#8A7B99;
+  font-size:13px;
+  font-weight:700;
+}
+.book-body{
+  padding:15px 16px 17px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  flex:1;
+}
+.book-cat{
+  display:inline-block;
+  font-size:12px;
+  font-weight:800;
+  color:var(--ink);
+  align-self:flex-start;
+  padding:3px 11px;
+  border-radius:999px;
+  border:2px solid var(--ink);
+}
+.book-title{
+  font-size:16.5px;
+  font-weight:700;
+  line-height:1.35;
+  margin:2px 0 0;
+}
+.book-price{
+  font-size:19px;
+  font-weight:800;
+  color:#2E9E6D;
+}
+.book-meta{
+  font-size:12.5px;
+  color:#6B5B7B;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  margin-top:2px;
+}
+.book-meta b{ color:var(--ink); }
+.contact-btn{
+  margin-top:10px;
+  text-align:center;
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--ink);
+  background:var(--mint);
+  border:2px solid var(--ink);
+  border-radius:12px;
+  padding:9px;
+  cursor:pointer;
+}
+.contact-btn:hover{ background:var(--mint-deep); }
+
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  color:#6B5B7B;
+  font-size:15px;
+}
+.empty-state .display-title{ font-size:20px; font-weight:800; color:var(--ink); margin-bottom:6px; }
+
+footer{
+  position:relative;
+  z-index:1;
+  text-align:center;
+  font-size:12.5px;
+  color:#8A7B99;
+  padding:20px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<header class="hero">
+  <div class="speech-bubble">
+    <span class="eyebrow">📚 ตลาดนัดหนังสือของนักเรียน</span>
+    <h1 class="title">ส่งต่อหนังสือ<br><span class="hl">มือสอง</span> กันเถอะ!</h1>
+    <p class="subtitle">ลงขายหนังสือที่ไม่ได้ใช้แล้ว หรือตามหาหนังสือมือสองจากเพื่อน ๆ ในราคาน่ารัก ๆ 💛</p>
+  </div>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="browse">🔎 ดูหนังสือทั้งหมด</button>
+    <button class="tab-btn" data-tab="sell">🏷️ ลงขายหนังสือ</button>
+  </div>
+
+  <!-- BROWSE PANEL -->
+  <section class="panel active" id="panel-browse">
+    <div class="filter-row" id="filterRow"></div>
+    <div class="grid" id="bookGrid"></div>
+  </section>
+
+  <!-- SELL PANEL -->
+  <section class="panel" id="panel-sell">
+    <form id="sellForm" class="sticker-card">
+      <p class="form-title">✏️ ลงขายหนังสือของคุณ</p>
+      <p class="form-note">
+        * ข้อมูลและรูปภาพที่กรอกจะถูกบันทึกไว้และ<b>แสดงให้ทุกคนที่เข้าเว็บนี้เห็นได้</b>
+        รวมถึงเลขรหัสนักเรียนที่กรอกไว้ด้วย กรุณาตรวจสอบก่อนกดลงขาย 💡
+      </p>
+
+      <div class="field">
+        <label>ชื่อหนังสือ <span class="req">*</span></label>
+        <input type="text" id="f_title" placeholder="เช่น คณิตศาสตร์ ม.4 เล่ม 1" required>
+      </div>
+
+      <div class="field">
+        <label>หมวดหมู่ <span class="req">*</span></label>
+        <div class="cat-picker" id="catPicker"></div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>ราคา (บาท) <span class="req">*</span></label>
+          <input type="number" id="f_price" min="0" placeholder="0" required>
+        </div>
+        <div class="field">
+          <label>สภาพหนังสือ <span class="req">*</span></label>
+          <select id="f_condition" required>
+            <option value="">เลือกสภาพ</option>
+            <option value="ใหม่มาก / ไม่ได้ใช้">ใหม่มาก / ไม่ได้ใช้</option>
+            <option value="ดีมาก">ดีมาก</option>
+            <option value="ดี มีรอยใช้งานเล็กน้อย">ดี มีรอยใช้งานเล็กน้อย</option>
+            <option value="พอใช้ มีขีดเขียนบ้าง">พอใช้ มีขีดเขียนบ้าง</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>จุดนัดรับ <span class="req">*</span></label>
+          <input type="text" id="f_meetup" placeholder="เช่น หน้าโรงอาหาร, ตึก 3" required>
+        </div>
+        <div class="field">
+          <label>ช่องทางติดต่อ <span class="req">*</span></label>
+          <input type="text" id="f_contact" placeholder="เช่น Line ID, เบอร์โทร" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>เลขรหัสประจำตัวนักเรียน <span class="req">*</span></label>
+        <input type="text" id="f_studentid" placeholder="เช่น 12345" required>
+      </div>
+
+      <div class="field">
+        <label>รูปปกหนังสือ</label>
+        <div class="upload-box" id="uploadBox">
+          <input type="file" id="f_image" accept="image/*" capture="environment">
+          <div id="uploadLabel">📷 แตะเพื่อถ่ายรูป หรือเลือกรูปจากเครื่อง</div>
+          <div class="upload-hint">แนบรูปถ่ายจริงของหนังสือ จะช่วยให้ขายง่ายขึ้นนะ</div>
+          <div id="previewWrap"><img id="previewImg"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">✅ ลงขายหนังสือ</button>
+      <p class="status-msg" id="statusMsg"></p>
+    </form>
+  </section>
+</main>
+
+<footer>ทำด้วย 💖 สำหรับนักเรียนที่อยากส่งต่อหนังสือให้คุ้มค่าที่สุด</footer>
+
+<script>
+// =========================================================
+// ตั้งค่า: ลิงก์ Google Apps Script Web App ของคุณ
+// =========================================================
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3ApVQISiQ8EX4BABuyPg3BWnZbdBQ0MoAbL8DblpMpEdt-20-vkmaobfUIA_w1UY/exec";
+
+const CATEGORIES = ["เรียน/ตำรา", "เตรียมสอบ", "นิยาย", "การ์ตูน", "อื่นๆ"];
+const CAT_COLORS = ["#FFD1E8", "#C6F5DE", "#C7E9FB", "#FFF2A8", "#E3D7FF"];
+
+let selectedCategory = null;
+let activeFilter = "ทั้งหมด";
+let imageDataUrl = null;
+let allListings = [];
+
+// ---------- Tabs ----------
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const tab = btn.dataset.tab;
+    document.getElementById("panel-browse").classList.toggle("active", tab === "browse");
+    document.getElementById("panel-sell").classList.toggle("active", tab === "sell");
+    if (tab === "browse") loadListings();
+  });
+});
+
+// ---------- Category picker (sell form) ----------
+const catPicker = document.getElementById("catPicker");
+CATEGORIES.forEach((cat, i) => {
+  const chip = document.createElement("div");
+  chip.className = "cat-chip";
+  chip.textContent = cat;
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".cat-chip").forEach(c => c.classList.remove("selected"));
+    chip.classList.add("selected");
+    chip.style.background = CAT_COLORS[i];
+    selectedCategory = cat;
+  });
+  catPicker.appendChild(chip);
+});
+
+// ---------- Filter chips (browse) ----------
+const filterRow = document.getElementById("filterRow");
+function renderFilterChips() {
+  filterRow.innerHTML = "";
+  ["ทั้งหมด", ...CATEGORIES].forEach((cat, i) => {
+    const chip = document.createElement("div");
+    chip.className = "filter-chip" + (cat === activeFilter ? " active" : "");
+    chip.textContent = cat;
+    if (cat === activeFilter && i > 0) chip.style.background = CAT_COLORS[i - 1];
+    chip.addEventListener("click", () => {
+      activeFilter = cat;
+      renderFilterChips();
+      renderGrid();
+    });
+    filterRow.appendChild(chip);
+  });
+}
+
+// ---------- Image upload + compression ----------
+// Google Sheets จำกัดความยาวข้อความต่อ 1 ช่องไว้ที่ราว 50,000 ตัวอักษร
+// เราจึงย่อรูปและลดคุณภาพลงเรื่อย ๆ จนกว่าไฟล์ base64 จะมีขนาดพอดี
+const MAX_BASE64_LENGTH = 45000;
+
+const uploadBox = document.getElementById("uploadBox");
+const fileInput = document.getElementById("f_image");
+uploadBox.addEventListener("click", () => fileInput.click());
+
+fileInput.addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById("uploadLabel").textContent = "⏳ กำลังย่อรูป...";
+  try {
+    imageDataUrl = await compressImage(file);
+    document.getElementById("previewImg").src = imageDataUrl;
+    document.getElementById("previewWrap").style.display = "flex";
+    document.getElementById("uploadLabel").textContent = "✅ เลือกรูปแล้ว แตะเพื่อเปลี่ยนรูป";
+  } catch (err) {
+    console.error(err);
+    document.getElementById("uploadLabel").textContent = "⚠️ แนบรูปไม่สำเร็จ ลองรูปอื่นดูนะ";
+  }
+});
+
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("read failed"));
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("image load failed"));
+      img.onload = () => {
+        let width = 520;
+        let quality = 0.6;
+        let attempt = () => {
+          const scale = Math.min(1, width / img.width);
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          if (dataUrl.length > MAX_BASE64_LENGTH && (quality > 0.3 || width > 260)) {
+            quality = Math.max(0.3, quality - 0.1);
+            width = Math.max(260, width - 80);
+            attempt();
+          } else {
+            resolve(dataUrl);
+          }
+        };
+        attempt();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ---------- Submit ----------
+const sellForm = document.getElementById("sellForm");
+const statusMsg = document.getElementById("statusMsg");
+const submitBtn = document.getElementById("submitBtn");
+
+sellForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  statusMsg.textContent = "";
+  statusMsg.className = "status-msg";
+
+  const title = document.getElementById("f_title").value.trim();
+  const price = document.getElementById("f_price").value;
+  const condition = document.getElementById("f_condition").value;
+  const meetup = document.getElementById("f_meetup").value.trim();
+  const contact = document.getElementById("f_contact").value.trim();
+  const studentId = document.getElementById("f_studentid").value.trim();
+
+  if (!selectedCategory) {
+    statusMsg.textContent = "กรุณาเลือกหมวดหมู่หนังสือ";
+    statusMsg.className = "status-msg err";
+    return;
+  }
+  if (!title || !price || !condition || !meetup || !contact || !studentId) {
+    statusMsg.textContent = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
+    statusMsg.className = "status-msg err";
+    return;
+  }
+
+  const listing = {
+    id: "book_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+    title, price: Number(price), condition, meetup, contact, studentId,
+    category: selectedCategory,
+    image: imageDataUrl || "",
+    createdAt: Date.now()
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "กำลังบันทึก...";
+
+  try {
+    // ส่งเป็น text/plain เพื่อเลี่ยงปัญหา CORS preflight กับ Google Apps Script
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(listing)
+    });
+    const result = await res.json().catch(() => ({}));
+    if (result && result.status === "error") throw new Error(result.message || "save failed");
+
+    statusMsg.textContent = "🎉 ลงขายสำเร็จ! ไปที่แท็บ “ดูหนังสือทั้งหมด” เพื่อดูประกาศของคุณ";
+    statusMsg.className = "status-msg ok";
+    sellForm.reset();
+    document.querySelectorAll(".cat-chip").forEach(c => { c.classList.remove("selected"); c.style.background = ""; });
+    selectedCategory = null;
+    imageDataUrl = null;
+    document.getElementById("previewWrap").style.display = "none";
+    document.getElementById("uploadLabel").textContent = "📷 แตะเพื่อถ่ายรูป หรือเลือกรูปจากเครื่อง";
+  } catch (err) {
+    console.error(err);
+    statusMsg.textContent = "เกิดข้อผิดพลาด ลองใหม่อีกครั้ง (ตรวจสอบลิงก์ Apps Script และการตั้งค่าการเข้าถึง)";
+    statusMsg.className = "status-msg err";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "✅ ลงขายหนังสือ";
+  }
+});
+
+// ---------- Load & render listings ----------
+async function loadListings() {
+  const grid = document.getElementById("bookGrid");
+  grid.innerHTML = `<div class="empty-state">กำลังโหลดประกาศ... 🐣</div>`;
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, { method: "GET" });
+    const items = await res.json();
+    allListings = Array.isArray(items) ? items.filter(Boolean) : [];
+    allListings.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    renderGrid();
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = `<div class="empty-state">
+      <div class="display-title">โหลดข้อมูลไม่สำเร็จ 😢</div>
+      ตรวจสอบว่าลิงก์ Google Apps Script ตั้งค่าการเข้าถึงเป็น "Anyone" แล้ว ลองรีเฟรชหน้าใหม่อีกครั้ง
+    </div>`;
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById("bookGrid");
+  const filtered = activeFilter === "ทั้งหมด" ? allListings : allListings.filter(l => l.category === activeFilter);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="display-title">ยังไม่มีประกาศในหมวดนี้</div>
+      เป็นคนแรกที่ลงขายหนังสือสิ! 🌟
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = "";
+  filtered.forEach(book => {
+    const catIndex = CATEGORIES.indexOf(book.category);
+    const catColor = catIndex >= 0 ? CAT_COLORS[catIndex] : "#EEE";
+    const card = document.createElement("div");
+    card.className = "book-card sticker-card";
+    card.innerHTML = `
+      ${book.image
+        ? `<img class="book-img" src="${book.image}" alt="${escapeHtml(book.title)}">`
+        : `<div class="book-img placeholder">ไม่มีรูปภาพ</div>`}
+      <div class="book-body">
+        <span class="book-cat" style="background:${catColor}">${escapeHtml(book.category)}</span>
+        <p class="book-title">${escapeHtml(book.title)}</p>
+        <span class="book-price">฿${Number(book.price).toLocaleString()}</span>
+        <div class="book-meta">
+          <span><b>สภาพ:</b> ${escapeHtml(book.condition)}</span>
+          <span><b>นัดรับ:</b> ${escapeHtml(book.meetup)}</span>
+        </div>
+        <div class="contact-btn">📩 ติดต่อ: ${escapeHtml(book.contact)}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+
+renderFilterChips();
+loadListings();
+
+</script>
+</body>
+</html>
